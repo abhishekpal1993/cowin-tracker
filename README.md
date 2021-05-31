@@ -25,7 +25,7 @@ Node.js is an open-source, cross-platform, back-end JavaScript runtime environme
 - Open constants file `src/constants.ts` and update following: 
     - `pincodes`: Pincodes of locality to check vaccine availability.
     - `mobile`: Mobile number for login.
-    - `interval`: Interval for checking available vaccine slots. Lowest possible interval is 15secs below which it will default to 15secs.
+    - `interval`: Interval for checking available vaccine slots, in seconds. Lowest possible interval is 15secs below which it will default to 15secs.
     - `filters`: Filters are used to streamline the scan for vaccine slots. Following filters work in logical conjunction to each other (logical AND operation):
         - `fee_type`: Fee type for vaccination. Possible values - **Free** or **Paid**.
         - `age_group`: Age group for vaccination. Possible values - **18+** or **45+**.
