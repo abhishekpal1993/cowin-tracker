@@ -12,5 +12,4 @@ export const constants: Constants = {
     vaccine: 'COVISHIELD',
     looking_for: 'Dose1',
   },
-  rateLimitPrecaution: true,
 };

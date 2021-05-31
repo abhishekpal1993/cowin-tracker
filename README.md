@@ -11,7 +11,7 @@ Script to check the available slots for Covid-19 Vaccination Centers from CoWIN 
     * Enter OTP
     * Select beneficiary for Schedule
     * Slot Booking
-&nbsp;
+
 # Installing Node.js
 Node.js is an open-source, cross-platform, back-end JavaScript runtime environment that runs on the V8 engine and executes JavaScript code outside a web browser. 
 
@@ -22,17 +22,22 @@ Node.js is an open-source, cross-platform, back-end JavaScript runtime environme
 - Clone the repository using terminal.
 - Go to repo folder - `cd cowin-tracker`
 - Install all the dependencies - `npm ci`
-- Open constants file `src/constants.js` and update following: 
+- Open constants file `src/constants.ts` and update following: 
     - `pincodes`: Pincodes of locality to check vaccine availability.
     - `mobile`: Mobile number for login.
+    - `interval`: Interval for checking available vaccine slots. Lowest possible interval is 15secs below which it will default to 15secs.
+    - `filters`: Filters are used to streamline the scan for vaccine slots. Following filters work in logical conjunction to each other (logical AND operation):
+        - `fee_type`: Fee type for vaccination. Possible values - **Free** or **Paid**.
+        - `age_group`: Age group for vaccination. Possible values - **18+** or **45+**.
+        - `vaccine`: Type of vaccine. Possible values - **COVISHIELD** or **COVAXIN** (more will be added later).
+        - `looking_for`: Searching for first or second dose of vaccination. Possible values - **Dose1** or **Dose2**.
+    - `alarm`: Youtube video link with audio track to alert you about the open browser.
 - Run - `npm start`
 
-# Additional Setup
-- Open constants file `src/constants.js` and update following: 
-    - `interval`: Interval for checking available vaccine slots. Lowest possible interval is 15secs below which it will default to 15secs.
-    - `alarm`: Youtube video with audio track to alert you about the open browser.
-    - `filters`: These filters are used to streamline the scan for vaccine slots. For now only 4 filters are available which can get the job done. Currently all filters work in logical conjunction to each other (logical AND operation)
-
+# Additional Configurations (Optional)
+Open constants file `src/constants.ts` and add following:
+- `backgroundSearch`: Allow background API request calls to search for slots when browser is open. Default value is **False**.
+- `scheduleFirstPerson`: Automatically choose first person from list on dashboard. Default value is **False**.
 
 ### Please Note:
 * The script only works with Indian IP addresses.
@@ -40,4 +45,5 @@ Node.js is an open-source, cross-platform, back-end JavaScript runtime environme
 ```javascript
 (60 / interval) * (total no.of pincodes) * 5 < 100
 ```
+* If none of the filters are added in constants file, then all centers will be considered which have atleast one vaccine slot available irrespective of type, age_group, fee.
 &nbsp;

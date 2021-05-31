@@ -144,7 +144,7 @@ const watchBrowser = async (browser: puppeteer.Browser, header: string) => {
   }
 };
 
-export const openCowin = async (data: Session[], mobile: string, alarm: string, scheduleFirstBeneficiary = false): Promise<void> => {
+export const openCowin = async (data: Session[], mobile: string, alarm: string, scheduleFirstPerson = false): Promise<void> => {
   let browser: puppeteer.Browser = null;
   try {
     const browserExists = await checkBrowserOpen();
@@ -162,7 +162,7 @@ export const openCowin = async (data: Session[], mobile: string, alarm: string, 
     await clickSubmitButtonMobilePage(page);
     await waitForDashboardPage(page);
 
-    if (scheduleFirstBeneficiary) {
+    if (scheduleFirstPerson) {
       await clickOnFirstBeneficiarySchedule(page);
     }
 

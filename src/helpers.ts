@@ -11,7 +11,8 @@ export const logger = (header = "", ...msgs: any[]): void => {
   debug(`${namespace}:${header}`).apply(undefined, ["%O", ...msgs]);
 };
 
-export const scriptStatus = (header: string): void => logger(`Script:${header}`, moment());
+export const scriptStatus = (header: string): void =>
+  logger(`Script:${header}`, moment());
 
 export const delay = (milliseconds: number): Promise<void> =>
   new Promise((resolve) => {
@@ -36,8 +37,12 @@ export const loggerFilter = (session: Session) => ({
 export const dataFilter = (session: Session, filters: Filters): boolean => {
   let flag = true;
 
+  // default
+  flag = flag && session.available_capacity > 0;
+
   // filter by fee
   if (
+    flag &&
     filters.fee_type &&
     (filters.fee_type === "Free" || filters.fee_type === "Paid")
   ) {
@@ -46,6 +51,7 @@ export const dataFilter = (session: Session, filters: Filters): boolean => {
 
   // filter by vaccine type
   if (
+    flag &&
     filters.vaccine &&
     (filters.vaccine === "COVISHIELD" || filters.vaccine === "COVAXIN")
   ) {
@@ -53,20 +59,20 @@ export const dataFilter = (session: Session, filters: Filters): boolean => {
   }
 
   // filter by age group
-  if (filters.age_group && filters.age_group === "18+") {
+  if (flag && filters.age_group && filters.age_group === "18+") {
     flag = flag && session.min_age_limit < 45;
   }
 
-  if (filters.age_group && filters.age_group === "45+") {
+  if (flag && filters.age_group && filters.age_group === "45+") {
     flag = flag && session.min_age_limit >= 45;
   }
 
   // filter by dose1 or dose 2
-  if (filters.looking_for && filters.looking_for === "Dose1") {
+  if (flag && filters.looking_for && filters.looking_for === "Dose1") {
     flag = flag && session.available_capacity_dose1 > 0;
   }
 
-  if (filters.looking_for && filters.looking_for === "Dose2") {
+  if (flag && filters.looking_for && filters.looking_for === "Dose2") {
     flag = flag && session.available_capacity_dose2 > 0;
   }
 
@@ -89,13 +95,13 @@ export const dataSort = (
 
 export const fetchByPinWeekWise = (
   pincodes: string[] = [],
-  rateLimitPrecaution = false
+  backgroundSearch = false
 ): Promise<Session[]> => {
   const url =
     "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin";
   const promises = [];
 
-  if (rateLimitPrecaution && global.globalBrowser) {
+  if (!backgroundSearch && global.globalBrowser) {
     logger("fetchByPinWeekWise", "Browser already running");
     return Promise.resolve([]);
   }
